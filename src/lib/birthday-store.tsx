@@ -43,6 +43,8 @@ export interface BirthdaySettings {
   g1: string;
   g2: string;
   g3: string;
+  creatorText: string;
+  creatorInstagram: string;
 }
 
 export interface ConfettiPiece {
@@ -64,6 +66,8 @@ export const DEFAULT_SETTINGS: BirthdaySettings = {
   g1: "Foto Kenangan: Kamu cantik banget hari ini!",
   g2: "Video Ucapan: Happy Birthday Riyanti!",
   g3: "Pesan Rahasia: Ada yang sayang banget sama kamu!",
+  creatorText: "",
+  creatorInstagram: "",
 };
 
 export const DEFAULT_PHOTOS: PhotoItem[] = [
@@ -131,6 +135,33 @@ export function formatIndonesianDate(isoDate: string): string {
   const monthName = months[monthIdx];
   if (!monthName || Number.isNaN(day) || Number.isNaN(year)) return isoDate;
   return `${String(day).padStart(2, "0")} ${monthName} ${year}`;
+}
+
+export function normalizeInstagramUrl(
+  raw: string,
+): { href: string; label: string } | null {
+  const trimmed = raw.trim();
+  if (!trimmed) return null;
+
+  if (/^https?:\/\//i.test(trimmed)) {
+    try {
+      const url = new URL(trimmed);
+      const seg = url.pathname.split("/").filter(Boolean)[0];
+      return {
+        href: url.toString(),
+        label: seg ? `@${seg.replace(/^@/, "")}` : url.hostname,
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  const handle = trimmed.replace(/^@+/, "").replace(/^\/+|\/+$/g, "");
+  if (!handle || /\s/.test(handle)) return null;
+  return {
+    href: `https://instagram.com/${encodeURIComponent(handle)}`,
+    label: `@${handle}`,
+  };
 }
 
 interface BirthdayContextValue {

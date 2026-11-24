@@ -92,7 +92,11 @@ function AdminPage() {
       toast.error("Nama tidak boleh kosong.");
       return;
     }
-    saveSettings(form);
+    saveSettings({
+      ...form,
+      creatorText: form.creatorText.trim(),
+      creatorInstagram: form.creatorInstagram.trim(),
+    });
     toast.success("Pengaturan berhasil disimpan.");
   };
 
@@ -340,6 +344,18 @@ function AdminPage() {
             value={form.g3}
             onChange={(e) => setForm({ ...form, g3: e.target.value })}
             placeholder="Isi Kado Kecil 3 - Pesan Rahasia"
+          />
+          <input
+            className={inputClass}
+            value={form.creatorText}
+            onChange={(e) => setForm({ ...form, creatorText: e.target.value })}
+            placeholder="Teks kredit pembuat (opsional)"
+          />
+          <input
+            className={inputClass}
+            value={form.creatorInstagram}
+            onChange={(e) => setForm({ ...form, creatorInstagram: e.target.value })}
+            placeholder="Username atau link Instagram (opsional)"
           />
         </div>
         <button

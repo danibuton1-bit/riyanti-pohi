@@ -1,8 +1,8 @@
 import { useState, type ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Music, Pause, Play, SkipForward, Sparkles, Volume2 } from "lucide-react";
+import { Instagram, Music, Pause, Play, SkipForward, Sparkles, Volume2 } from "lucide-react";
 import { toast } from "sonner";
-import { useBirthday } from "@/lib/birthday-store";
+import { normalizeInstagramUrl, useBirthday } from "@/lib/birthday-store";
 
 const NAV_LINKS = [
   { to: "/", label: "Beranda" },
@@ -39,6 +39,8 @@ export function BirthdayShell({ children }: { children: ReactNode }) {
   const [balloons, setBalloons] = useState([true, true]);
 
   const currentSong = songs[currentSongIndex];
+  const creatorText = settings.creatorText.trim();
+  const instagramLink = normalizeInstagramUrl(settings.creatorInstagram);
 
   const popBalloon = (idx: number) => {
     setBalloons((prev) => prev.map((v, i) => (i === idx ? false : v)));
@@ -125,8 +127,30 @@ export function BirthdayShell({ children }: { children: ReactNode }) {
 
       <main className="mx-auto max-w-6xl px-4 pt-6 sm:px-6 sm:pt-8">{children}</main>
 
-      <footer className="mt-14 border-t border-border/60 py-6 text-center text-xs text-muted-foreground">
-        Website pribadi untuk {settings.name} • Dibuat dengan cinta
+      <footer className="mt-14 border-t border-border/60 px-4 py-6 text-center text-xs text-muted-foreground">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-2 gap-y-1.5">
+          <span>Website pribadi untuk {settings.name}</span>
+          {creatorText && (
+            <>
+              <span aria-hidden="true">•</span>
+              <span>{creatorText}</span>
+            </>
+          )}
+          {instagramLink && (
+            <>
+              <span aria-hidden="true">•</span>
+              <a
+                href={instagramLink.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 font-medium text-rose-gold-deep transition-colors hover:text-primary"
+              >
+                <Instagram className="h-3.5 w-3.5" />
+                <span>{instagramLink.label}</span>
+              </a>
+            </>
+          )}
+        </div>
       </footer>
 
       {/* Persistent bottom rose-gold music bar */}
