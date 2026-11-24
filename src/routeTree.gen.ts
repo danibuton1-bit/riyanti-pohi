@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as GaleriRouteImport } from './routes/galeri'
+import { Route as UcapanRouteImport } from './routes/ucapan'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GaleriRoute = GaleriRouteImport.update({
+  id: '/galeri',
+  path: '/galeri',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UcapanRoute = UcapanRouteImport.update({
+  id: '/ucapan',
+  path: '/ucapan',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/galeri': typeof GaleriRoute
+  '/ucapan': typeof UcapanRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/galeri': typeof GaleriRoute
+  '/ucapan': typeof UcapanRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/galeri': typeof GaleriRoute
+  '/ucapan': typeof UcapanRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/admin' | '/galeri' | '/ucapan'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/admin' | '/galeri' | '/ucapan'
+  id: '__root__' | '/' | '/admin' | '/galeri' | '/ucapan'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
+  GaleriRoute: typeof GaleriRoute
+  UcapanRoute: typeof UcapanRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/galeri': {
+      id: '/galeri'
+      path: '/galeri'
+      fullPath: '/galeri'
+      preLoaderRoute: typeof GaleriRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ucapan': {
+      id: '/ucapan'
+      path: '/ucapan'
+      fullPath: '/ucapan'
+      preLoaderRoute: typeof UcapanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
+  GaleriRoute: GaleriRoute,
+  UcapanRoute: UcapanRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
